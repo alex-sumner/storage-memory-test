@@ -22,7 +22,7 @@ contract MemoryOrStorage {
         // slot 3
         uint128 forVotes;
         uint128 againstVotes;
-        mapping(address => Receipt) receipts;
+        // mapping(address => Receipt) receipts;
     }
 
     mapping(uint256 => Proposal) public proposals;
@@ -38,7 +38,7 @@ contract MemoryOrStorage {
         Defeated
     }
 
-    constructor(address addr1, address addr2, address addr3, address addr4) {
+        constructor(/*address addr1, address addr2, address addr3, address addr4*/) {
         //dummy data for test
         totalMembers = 100;
         for (uint i = 0; i < 10; i++) {
@@ -50,14 +50,14 @@ contract MemoryOrStorage {
             proposals[i].canceled =  OneInFour;
             proposals[i].forVotes = uint128(OneInFour ? i * 10 : 1 * 5);
             proposals[i].againstVotes = uint128(OneInFour ? i * 10 : 1 * 5);
-            proposals[i].receipts[addr1] = Receipt(true, true);
-            proposals[i].receipts[addr2] = Receipt(true, false);           
-            proposals[i].receipts[addr3] = Receipt(true, false);
-            proposals[i].receipts[addr4] = Receipt(true, false);
+            // proposals[i].receipts[addr1] = Receipt(true, true);
+            // proposals[i].receipts[addr2] = Receipt(true, false);           
+            // proposals[i].receipts[addr3] = Receipt(true, false);
+            // proposals[i].receipts[addr4] = Receipt(true, false);
         }
     }
     
-    function stateStorage(uint256 proposalId) public view returns (ProposalState) {
+    function stateStorage(uint256 proposalId) public returns (ProposalState) {
         Proposal storage p = proposals[proposalId];
 
         if (p.executed) return ProposalState.Executed;
@@ -69,7 +69,7 @@ contract MemoryOrStorage {
         return ProposalState.Defeated;
     }
 
-    function stateMemory(uint256 proposalId) public view returns (ProposalState) {
+    function stateMemory(uint256 proposalId) public returns (ProposalState) {
         Proposal memory p = proposals[proposalId];
 
         if (p.executed) return ProposalState.Executed;
@@ -81,7 +81,7 @@ contract MemoryOrStorage {
         return ProposalState.Defeated;
     }
 
-    function _isSucceeded(Proposal storage proposal) internal view returns (bool) {
+    function _isSucceeded(Proposal memory proposal) internal view returns (bool) {
 
         // Why quorum considering forVotes and not total turnout ? like compound
         // reason here : ./DecisionsAndFlaws.md
